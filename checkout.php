@@ -32,7 +32,7 @@ if(isset($_POST["checkout"])){
 <!DOCTYPE html>
 <html>
 <head>
-<title>Tokopekita - Checkout</title>
+<title>Tokobuku - Checkout</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -115,7 +115,7 @@ if(isset($_POST["checkout"])){
 				</ul>
 			</div>
 			<div class="w3ls_logo_products_left">
-				<h1><a href="index.php">Tokopekita</a></h1>
+				<h1><a href="index.php">Tokobuku</a></h1>
 			</div>
 		<div class="w3l_search">
 			<form action="search.php" method="post">
@@ -194,7 +194,7 @@ if(isset($_POST["checkout"])){
 <!-- checkout -->
 	<div class="checkout">
 		<div class="container">
-			<h1>Terima kasih, <?=$_SESSION['name']?> telah membeli <?php echo $itungtrans3 ?> barang di Tokopekita</span></h1>
+			<h1>Terima kasih, <?=$_SESSION['name']?> telah membeli <?php echo $itungtrans3 ?> barang di Tokobuku</span></h1>
 			<div class="checkout-right">
 				<table class="timetable_sub">
 					<thead>
@@ -202,9 +202,7 @@ if(isset($_POST["checkout"])){
 							<th>No.</th>	
 							<th>Produk</th>
 							<th>Nama Produk</th>
-							<th>Jumlah</th>
-							
-						
+							<th>Jumlah</th>	
 							<th>Sub Total</th>
 							<th>Hapus</th>
 						</tr>
@@ -227,8 +225,24 @@ if(isset($_POST["checkout"])){
 								</div>
 							</div>
 						</td>
-				
-						<td class="invert">Rp<?php echo number_format($b['hargaafter']*$b['qty']) ?></td>
+						
+						<?php
+						if ($b['hargaafter'] == 0) {
+						?>
+
+						<td class="invert">Rp<?php echo number_format($b['hargabefore']) ?></td>
+
+						<?php
+						}
+						if (!$b['hargaafter'] == 0) {
+						?>
+
+						<td class="invert">Rp<?php echo number_format($b['hargaafter']) ?></td>
+
+						<?php
+						}
+						?>
+
 						<td class="invert">
 							<div class="rem">
 							
@@ -275,7 +289,13 @@ if(isset($_POST["checkout"])){
 						$no=1;
 						$subtotal = 0;
 						while($b=mysqli_fetch_array($brg)){
-						$hrg = $b['hargaafter'];
+						
+						if ($b['hargaafter'] == 0) {
+							$hrg = $b['hargabefore'];
+						}
+						if (!$b['hargaafter'] == 0) {
+							$hrg = $b['hargaafter'];
+						}
 						$qtyy = $b['qty'];
 						$totalharga = $hrg * $qtyy;
 						$subtotal += $totalharga;

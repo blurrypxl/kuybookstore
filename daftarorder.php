@@ -239,7 +239,15 @@ if (isset($_POST["update"])) {
 
 									Rp<?php $ongkir = 10000;
 										$ordid = $b['orderid'];
-										$result1 = mysqli_query($conn, "SELECT SUM(qty*hargaafter)+$ongkir AS count FROM detailorder d, produk p where d.orderid='$ordid' and p.idproduk=d.idproduk order by d.idproduk ASC");
+
+										$hargaProduk = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM detailorder d, produk p WHERE orderid='$ordid' AND d.idproduk=p.idproduk"));
+
+										if ($hargaProduk['hargaafter'] == 0) {
+											$result1 = mysqli_query($conn, "SELECT SUM(qty*hargabefore)+$ongkir AS count FROM detailorder d, produk p where d.orderid='$ordid' and p.idproduk=d.idproduk order by d.idproduk ASC");
+										}
+										if (!$hargaProduk['hargaafter'] == 0) {
+											$result1 = mysqli_query($conn, "SELECT SUM(qty*hargaafter)+$ongkir AS count FROM detailorder d, produk p where d.orderid='$ordid' and p.idproduk=d.idproduk order by d.idproduk ASC");
+										}
 										$cekrow = mysqli_num_rows($result1);
 										$row1 = mysqli_fetch_assoc($result1);
 										$count = $row1['count'];

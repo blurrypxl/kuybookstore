@@ -244,15 +244,30 @@ if (isset($_POST["update"])) {
 									</div>
 								</td>
 
+								<?php
+								if ($b['hargaafter'] == 0) {
+								?>
+
+								<td class="invert">Rp<?php echo number_format($b['hargabefore']) ?></td>
+
+								<?php
+								}
+								if (!$b['hargaafter'] == 0) {
+								?>
+
 								<td class="invert">Rp<?php echo number_format($b['hargaafter']) ?></td>
+
+								<?php
+								}
+								?>
+								
 								<td class="invert">
 									<div class="rem">
-
 										<input type="submit" name="update" class="form-control" value="Update" \>
 										<input type="hidden" name="idproduknya" value="<?php echo $b['idproduk'] ?>" \>
 										<input type="submit" name="hapus" class="form-control" value="Hapus" \>
 							</form>
-			</div>
+				</div>
 			<script>
 				$(document).ready(function(c) {
 					$('.close1').on('click', function(c) {
@@ -294,7 +309,13 @@ if (isset($_POST["update"])) {
 					$no = 1;
 					$subtotal = 10000;
 					while ($b = mysqli_fetch_array($brg)) {
-						$hrg = $b['hargaafter'];
+
+						if ($b['hargaafter'] == 0) {
+							$hrg = $b['hargabefore'];
+						}
+						if (!$b['hargaafter'] == 0) {
+							$hrg = $b['hargaafter'];
+						}
 						$qtyy = $b['qty'];
 						$totalharga = $hrg * $qtyy;
 						$subtotal += $totalharga
