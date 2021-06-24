@@ -78,9 +78,7 @@ date_default_timezone_set("Asia/Bangkok");
                             <li><a href="user.php"><span>Kelola Staff</span></a></li>
                             <li>
                                 <a href="../logout.php"><span>Logout</span></a>
-
                             </li>
-
                         </ul>
                     </nav>
                 </div>
@@ -117,18 +115,15 @@ date_default_timezone_set("Asia/Bangkok");
                                             var yy = date.getYear();
                                             var year = (yy < 1000) ? yy + 1900 : yy;
                                             document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
-                                            //-->
-                                        </script></b>
+                                        </script>
                                     </div>
                                 </h3>
-
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
             <!-- header area end -->
-
 
             <!-- page title area end -->
             <div class="main-content-inner">
@@ -158,7 +153,7 @@ date_default_timezone_set("Asia/Bangkok");
                                         <tbody>
                                             <?php
                                             $brgs = mysqli_query($conn, "SELECT * FROM cart c, detailorder d, produk p, login l WHERE c.userid=l.userid AND c.orderid=d.orderid AND p.idproduk=d.idproduk AND status='Selesai' ORDER BY idcart DESC");
-                                            
+
                                             // $brgs = mysqli_query($conn, "SELECT cart.idcart, cart.orderid, cart.tglorder, cart.status, produk.idproduk, produk.namaproduk, detailorder.detailid, detailorder.orderid, detailorder.idproduk, detailorder.qty FROM detailorder JOIN cart ON detailorder.orderid=cart.orderid JOIN produk ON detailorder.orderid=produk.idproduk WHERE cart.status='Selesai' ORDER BY cart.idcart DESC");
 
                                             $no = 1;
@@ -232,15 +227,14 @@ date_default_timezone_set("Asia/Bangkok");
                     </div>
                 </div>
             </div>
-
             <!-- row area start-->
         </div>
     </div>
     <!-- main content area end -->
     <!-- footer area start-->
     <footer>
-        <div class="footer-area">
-            <p>By Richard's Lab</p>
+        <div class="footer-area px-4">
+            <p class="text-right">Kuy Book Store &copy; 2021</p>
         </div>
     </footer>
     <!-- footer area end-->
@@ -330,4 +324,5 @@ date_default_timezone_set("Asia/Bangkok");
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/scripts.js"></script>
 </body>
+
 </html>

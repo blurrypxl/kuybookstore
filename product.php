@@ -236,6 +236,7 @@ if (isset($_POST['addprod'])) {
 								</div>
 							</ul>
 						</li>
+						<li><a href="koleksiBuku.php">Koleksi Buku</a></li>
 						<li><a href="cart.php">Keranjang Saya</a></li>
 						<li><a href="konfirmasi.php">Daftar Order</a></li>
 					</ul>

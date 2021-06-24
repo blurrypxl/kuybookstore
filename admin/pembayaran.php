@@ -205,8 +205,8 @@ if (isset($_POST['addmethod'])) {
     <!-- main content area end -->
     <!-- footer area start-->
     <footer>
-        <div class="footer-area">
-            <p>By Richard's Lab</p>
+        <div class="footer-area px-4">
+            <p class="text-right">Kuy Book Store &copy; 2021</p>
         </div>
     </footer>
     <!-- footer area end-->
