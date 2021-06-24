@@ -218,8 +218,6 @@ if (isset($_POST["update"])) {
 							<th>Produk</th>
 							<th>Nama Produk</th>
 							<th>Jumlah</th>
-
-
 							<th>Harga Satuan</th>
 							<th>Hapus</th>
 						</tr>
@@ -234,7 +232,7 @@ if (isset($_POST["update"])) {
 						<tr class="rem1">
 							<form method="post">
 								<td class="invert"><?php echo $no++ ?></td>
-								<td class="invert"><a href="product.php?idproduk=<?php echo $b['idproduk'] ?>"><img src="<?php echo $b['gambar'] ?>" width="100px" height="100px" /></a></td>
+								<td class="invert"><a href="product.php?idproduk=<?php echo $b['idproduk'] ?>"><img src="<?php echo $b['gambar'] ?>" width="100px" height="auto" /></a></td>
 								<td class="invert"><?php echo $b['namaproduk'] ?></td>
 								<td class="invert">
 									<div class="quantity">
@@ -248,26 +246,26 @@ if (isset($_POST["update"])) {
 								if ($b['hargaafter'] == 0) {
 								?>
 
-								<td class="invert">Rp<?php echo number_format($b['hargabefore']) ?></td>
+									<td class="invert">Rp<?php echo number_format($b['hargabefore']) ?></td>
 
 								<?php
 								}
 								if (!$b['hargaafter'] == 0) {
 								?>
 
-								<td class="invert">Rp<?php echo number_format($b['hargaafter']) ?></td>
+									<td class="invert">Rp<?php echo number_format($b['hargaafter']) ?></td>
 
 								<?php
 								}
 								?>
-								
+
 								<td class="invert">
 									<div class="rem">
 										<input type="submit" name="update" class="form-control" value="Update" \>
 										<input type="hidden" name="idproduknya" value="<?php echo $b['idproduk'] ?>" \>
 										<input type="submit" name="hapus" class="form-control" value="Hapus" \>
 							</form>
-				</div>
+			</div>
 			<script>
 				$(document).ready(function(c) {
 					$('.close1').on('click', function(c) {

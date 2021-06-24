@@ -1,24 +1,7 @@
 <?php
 session_start();
 include '../dbconnect.php';
-
-if (isset($_POST['adduser'])) {
-    $username = $_POST['uname'];
-    $password = password_hash($_POST['upass'], PASSWORD_DEFAULT);
-
-    $tambahuser = mysqli_query($conn, "insert into login values('','$username','$password')");
-    if ($tambahuser) {
-        echo " <div class='alert alert-success'>
-			Berhasil menambahkan staff baru.
-		  </div>
-		<meta http-equiv='refresh' content='1; url= user.php'/>  ";
-    } else {
-        echo "<div class='alert alert-warning'>
-			Gagal menambahkan staff baru.
-		  </div>
-		 <meta http-equiv='refresh' content='1; url= user.php'/> ";
-    }
-};
+date_default_timezone_set("Asia/Bangkok");
 ?>
 
 <!doctype html>
@@ -28,7 +11,7 @@ if (isset($_POST['adduser'])) {
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="../favicon.png">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Kelola Staff - Tokopekita</title>
+    <title>Kelola Pesanan - Tokobuku</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/png" href="assets/images/icon/favicon.ico">
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -79,7 +62,7 @@ if (isset($_POST['adduser'])) {
                             <li>
                                 <a href="manageorder.php"><i class="ti-dashboard"></i><span>Kelola Pesanan</span></a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a href="logTransaksi.php"><i class="ti-file"></i><span>Log Transaksi</span></a>
                             </li>
                             <li>
@@ -92,7 +75,7 @@ if (isset($_POST['adduser'])) {
                                 </ul>
                             </li>
                             <li><a href="customer.php"><span>Kelola Pelanggan</span></a></li>
-                            <li class="active"><a href="user.php"><span>Kelola Staff</span></a></li>
+                            <li><a href="user.php"><span>Kelola Staff</span></a></li>
                             <li>
                                 <a href="../logout.php"><span>Logout</span></a>
 
@@ -134,6 +117,7 @@ if (isset($_POST['adduser'])) {
                                             var yy = date.getYear();
                                             var year = (yy < 1000) ? yy + 1900 : yy;
                                             document.write(thisDay + ', ' + day + ' ' + months[month] + ' ' + year);
+                                            //-->
                                         </script></b>
                                     </div>
                                 </h3>
@@ -143,6 +127,7 @@ if (isset($_POST['adduser'])) {
                     </div>
                 </div>
             </div>
+            <!-- header area end -->
 
 
             <!-- page title area end -->
@@ -153,51 +138,100 @@ if (isset($_POST['adduser'])) {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-sm-flex justify-content-between align-items-center">
-                                    <h2>Daftar Staff</h2>
+                                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                                    <h2>Log Transaksi</h2>
                                 </div>
                                 <div class="data-tables datatable-dark">
                                     <table id="dataTable3" class="display" style="width:100%">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th>No.</th>
-                                                <th>Nama</th>
-                                                <th>Email</th>
-                                                <th>Telepon</th>
-                                                <th>Alamat</th>
+                                                <th>No</th>
+                                                <th>ID Pesanan</th>
+                                                <th>Nama Customer</th>
+                                                <th>ID Produk</th>
+                                                <th>Nama Produk</th>
+                                                <th>Tanggal Order</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $brgs = mysqli_query($conn, "SELECT * from login where role='Admin' order by userid ASC");
-                                            $no = 1;
-                                            while ($p = mysqli_fetch_array($brgs)) {
+                                            $brgs = mysqli_query($conn, "SELECT * FROM cart c, detailorder d, produk p, login l WHERE c.userid=l.userid AND c.orderid=d.orderid AND p.idproduk=d.idproduk AND status='Selesai' ORDER BY idcart DESC");
+                                            
+                                            // $brgs = mysqli_query($conn, "SELECT cart.idcart, cart.orderid, cart.tglorder, cart.status, produk.idproduk, produk.namaproduk, detailorder.detailid, detailorder.orderid, detailorder.idproduk, detailorder.qty FROM detailorder JOIN cart ON detailorder.orderid=cart.orderid JOIN produk ON detailorder.orderid=produk.idproduk WHERE cart.status='Selesai' ORDER BY cart.idcart DESC");
 
+                                            $no = 1;
+
+                                            while ($p = mysqli_fetch_array($brgs)) {
+                                                $orderids = $p['orderid'];
                                             ?>
 
                                                 <tr>
                                                     <td><?php echo $no++ ?></td>
+                                                    <td><strong><?php echo $p['orderid'] ?></strong></td>
                                                     <td><?php echo $p['namalengkap'] ?></td>
-                                                    <td><?php echo $p['email'] ?></td>
-                                                    <td><?php echo $p['notelp'] ?></td>
-                                                    <td><?php echo $p['alamat'] ?></td>
 
+                                                    <td><?= $p['idproduk'] ?></td>
+                                                    <td><?= $p['namaproduk'] ?></td>
+
+                                                    <td><?php echo $p['tglorder'] ?></td>
+                                                    <td>Rp
+                                                        <?php
+                                                        // $ordid = $p['orderid'];
+
+                                                        // Mengambil data dari tabel detailorder & produk
+                                                        $hargaProduk = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM detailorder d, produk p WHERE orderid = '$orderids' AND d.idproduk=p.idproduk"));
+
+                                                        // Jika harga after = 0 maka, hitung harga before.
+                                                        // Jika harga after tidak = 0 maka, hitung harga after.
+                                                        if ($hargaProduk['hargaafter'] == 0) {
+                                                            $result1 = mysqli_query($conn, "SELECT SUM(d.qty*p.hargabefore) AS count FROM detailorder d, produk p where orderid='$orderids' and p.idproduk=d.idproduk order by d.idproduk ASC");
+                                                        }
+                                                        if (!$hargaProduk['hargaafter'] == 0) {
+                                                            $result1 = mysqli_query($conn, "SELECT SUM(d.qty*p.hargaafter) AS count FROM detailorder d, produk p where orderid='$orderids' and p.idproduk=d.idproduk order by d.idproduk ASC");
+                                                        }
+                                                        $cekrow = mysqli_num_rows($result1);
+                                                        $row1 = mysqli_fetch_assoc($result1);
+                                                        $count = $row1['count'];
+                                                        if ($cekrow > 0) {
+                                                            echo number_format($count);
+                                                        } else {
+                                                            echo 'No data';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        echo $p['status'];
+                                                        // $orders = $p['orderid'];
+                                                        // $cekkonfirmasipembayaran = mysqli_query($conn, "select * from konfirmasi where orderid='$orders'");
+                                                        // $cekroww = mysqli_num_rows($cekkonfirmasipembayaran);
+
+                                                        // if ($cekroww > 0) {
+                                                        //     echo 'Confirmed';
+                                                        // } else {
+                                                        //     if ($p['status'] != 'Pengiriman') {
+                                                        //         echo "Menunggu Konfirmasi";
+                                                        //     } else {
+                                                        //         echo "Pengiriman";
+                                                        //     };
+                                                        // }
+                                                        ?>
+                                                    </td>
                                                 </tr>
-
-
                                             <?php
                                             }
-
                                             ?>
                                         </tbody>
                                     </table>
                                 </div>
+                                <a href="datapesanan.php" target="_blank" class="btn btn-info">Export Data</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
             <!-- row area start-->
         </div>
@@ -213,34 +247,42 @@ if (isset($_POST['adduser'])) {
     </div>
     <!-- page container area end -->
 
-    <!-- modal input 
-			<div id="myModal" class="modal fade">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title">Tambah User Baru</h4>
-						</div>
-						<div class="modal-body">
-							<form method="post">
-								<div class="form-group">
-									<label>Username</label>
-									<input name="uname" type="text" class="form-control" placeholder="Username" required autofocus>
-								</div>
-								<div class="form-group">
-									<label>Password</label>
-									<input name="upass" type="password" class="form-control" placeholder="Password">
-								</div>
+    <!-- modal input -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Masukkan stok manual</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="tmb_brg_act.php" method="post">
+                        <div class="form-group">
+                            <label>Nama</label>
+                            <input name="nama" type="text" class="form-control" placeholder="Nama Barang" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jenis</label>
+                            <input name="jenis" type="text" class="form-control" placeholder="Jenis / Kategori Barang">
+                        </div>
+                        <div class="form-group">
+                            <label>Stock</label>
+                            <input name="stock" type="number" min="0" class="form-control" placeholder="Qty">
+                        </div>
+                        <div class="form-group">
+                            <label>Harga</label>
+                            <input name="harga" type="number" min="0" class="form-control" placeholder="Harga">
+                        </div>
 
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-								<input name="adduser" type="submit" class="btn btn-primary" value="Simpan">
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-	-->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                    <input type="submit" class="btn btn-primary" value="Simpan">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             $('#dataTable3').DataTable({
@@ -287,7 +329,5 @@ if (isset($_POST['adduser'])) {
     <!-- others plugins -->
     <script src="assets/js/plugins.js"></script>
     <script src="assets/js/scripts.js"></script>
-
 </body>
-
 </html>

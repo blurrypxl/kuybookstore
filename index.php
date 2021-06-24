@@ -155,7 +155,7 @@ include 'dbconnect.php';
 								</div>
 							</ul>
 						</li>
-						<li><a href="#">Koleksi Buku</a></li>
+						<li><a href="koleksiBuku.php">Koleksi Buku</a></li>
 						<li><a href="cart.php">Keranjang Saya</a></li>
 						<li><a href="daftarorder.php">Daftar Order</a></li>
 					</ul>

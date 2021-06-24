@@ -63,6 +63,9 @@ date_default_timezone_set("Asia/Bangkok");
                                 <a href="manageorder.php"><i class="ti-dashboard"></i><span>Kelola Pesanan</span></a>
                             </li>
                             <li>
+                                <a href="logTransaksi.php"><i class="ti-file"></i><span>Log Transaksi</span></a>
+                            </li>
+                            <li>
                                 <a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout"></i><span>Kelola Toko
                                     </span></a>
                                 <ul class="collapse">
@@ -154,6 +157,7 @@ date_default_timezone_set("Asia/Bangkok");
                                             <?php
                                             $brgs = mysqli_query($conn, "SELECT * from cart c, login l where c.userid=l.userid and status!='Cart' and status!='Selesai' order by idcart ASC");
                                             $no = 1;
+
                                             while ($p = mysqli_fetch_array($brgs)) {
                                                 $orderids = $p['orderid'];
                                             ?>
@@ -163,19 +167,33 @@ date_default_timezone_set("Asia/Bangkok");
                                                     <td><strong><a href="order.php?orderid=<?php echo $p['orderid'] ?>">#<?php echo $p['orderid'] ?></a></strong></td>
                                                     <td><?php echo $p['namalengkap'] ?></td>
                                                     <td><?php echo $p['tglorder'] ?></td>
-                                                    <td>Rp<?php
+                                                    <td>Rp
+                                                        <?php
+                                                        $ordid = $p['orderid'];
 
+                                                        // Mengambil data dari tabel detailorder & produk
+                                                        $hargaProduk = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM detailorder d, produk p WHERE orderid = '$ordid' AND d.idproduk=p.idproduk"));
+
+                                                        // Jika harga after = 0 maka, hitung harga before.
+                                                        // Jika harga after tidak = 0 maka, hitung harga after.
+                                                        if ($hargaProduk['hargaafter'] == 0) {
+                                                            $result1 = mysqli_query($conn, "SELECT SUM(d.qty*p.hargabefore) AS count FROM detailorder d, produk p where orderid='$orderids' and p.idproduk=d.idproduk order by d.idproduk ASC");
+                                                        }
+                                                        if (!$hargaProduk['hargaafter'] == 0) {
                                                             $result1 = mysqli_query($conn, "SELECT SUM(d.qty*p.hargaafter) AS count FROM detailorder d, produk p where orderid='$orderids' and p.idproduk=d.idproduk order by d.idproduk ASC");
-                                                            $cekrow = mysqli_num_rows($result1);
-                                                            $row1 = mysqli_fetch_assoc($result1);
-                                                            $count = $row1['count'];
-                                                            if ($cekrow > 0) {
-                                                                echo number_format($count);
-                                                            } else {
-                                                                echo 'No data';
-                                                            } ?></td>
-                                                    <td><?php
-
+                                                        }
+                                                        $cekrow = mysqli_num_rows($result1);
+                                                        $row1 = mysqli_fetch_assoc($result1);
+                                                        $count = $row1['count'];
+                                                        if ($cekrow > 0) {
+                                                            echo number_format($count);
+                                                        } else {
+                                                            echo 'No data';
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
                                                         //echo $p['status'] 
                                                         $orders = $p['orderid'];
                                                         $cekkonfirmasipembayaran = mysqli_query($conn, "select * from konfirmasi where orderid='$orders'");
@@ -190,8 +208,8 @@ date_default_timezone_set("Asia/Bangkok");
                                                                 echo "Pengiriman";
                                                             };
                                                         }
-
-                                                        ?></td>
+                                                        ?>
+                                                    </td>
                                                 </tr>
                                             <?php
                                             }
@@ -199,7 +217,7 @@ date_default_timezone_set("Asia/Bangkok");
                                         </tbody>
                                     </table>
                                 </div>
-                                <a href="datapesanan.php" target="_blank" class="btn btn-info">Export Data</a>
+                                <!-- <a href="datapesanan.php" target="_blank" class="btn btn-info">Export Data</a> -->
                             </div>
                         </div>
                     </div>

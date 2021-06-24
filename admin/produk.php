@@ -110,6 +110,9 @@ if (isset($_POST["addproduct"])) {
 							<li>
 								<a href="manageorder.php"><i class="ti-dashboard"></i><span>Kelola Pesanan</span></a>
 							</li>
+							<li>
+								<a href="logTransaksi.php"><i class="ti-file"></i><span>Log Transaksi</span></a>
+							</li>
 							<li class="active">
 								<a href="javascript:void(0)" aria-expanded="true"><i class="ti-layout"></i><span>Kelola Toko
 									</span></a>
