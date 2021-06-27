@@ -204,7 +204,7 @@ include 'dbconnect.php';
 								$brgs = mysqli_query($conn, "SELECT * from produk order by idproduk DESC");
 								$no = 1;
 								while ($p = mysqli_fetch_array($brgs)) {
-									if (!$p['hargaafter'] == 0) {
+									// if (!$p['hargaafter'] == 0) {
 								?>
 									<div class="col-md-4 top_brand_left">
 										<div class="hover14 column">
@@ -225,10 +225,10 @@ include 'dbconnect.php';
 
 																	for ($n = 1; $n <= $rate; $n++) {
 																		echo '<i class="fa fa-star blue-star" aria-hidden="true"></i>';
-																	};
+																	}
 																	?>
 																</div>
-																<h4>Rp<?php echo number_format($p['hargaafter']) ?> <span>Rp<?php echo number_format($p['hargabefore']) ?></span></h4>
+																<h4>Rp<?php echo number_format($p['hargaNormal']) ?></h4>
 															</div>
 															<div class="snipcart-details top_brand_home_details">
 																<fieldset>
@@ -242,7 +242,7 @@ include 'dbconnect.php';
 										</div>
 									</div>
 								<?php
-									}
+									// }
 								}
 								?>
 								<div class="clearfix"> </div>

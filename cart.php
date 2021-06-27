@@ -228,10 +228,17 @@ if (isset($_POST["update"])) {
 					$brg = mysqli_query($conn, "SELECT * from detailorder d, produk p where orderid='$orderidd' and d.idproduk=p.idproduk order by d.idproduk ASC");
 					$no = 1;
 					while ($b = mysqli_fetch_array($brg)) {
-
 					?>
+
 						<tr class="rem1">
 							<form method="post">
+								<?php
+								$idProduk = $b['idproduk'];
+								$qty = $b['qty'];
+
+								$data = mysqli_query($conn, "INSERT INTO produk (totalTransaksi) VALUE ('$qty') WHERE idproduk='$idProduk'");
+								?>
+
 								<td class="invert"><?php echo $no++ ?></td>
 								<td class="invert"><a href="product.php?idproduk=<?php echo $b['idproduk'] ?>"><img src="<?php echo $b['gambar'] ?>" width="100px" height="auto" /></a></td>
 								<td class="invert"><?php echo $b['namaproduk'] ?></td>
@@ -242,24 +249,7 @@ if (isset($_POST["update"])) {
 										</div>
 									</div>
 								</td>
-
-								<?php
-								if ($b['hargaafter'] == 0) {
-								?>
-
-									<td class="invert">Rp<?php echo number_format($b['hargabefore']) ?></td>
-
-								<?php
-								}
-								if (!$b['hargaafter'] == 0) {
-								?>
-
-									<td class="invert">Rp<?php echo number_format($b['hargaafter']) ?></td>
-
-								<?php
-								}
-								?>
-
+								<td class="invert">Rp<?php echo number_format($b['hargaNormal']) ?></td>
 								<td class="invert">
 									<div class="rem">
 										<input type="submit" name="update" class="form-control" value="Update" \>
@@ -307,14 +297,9 @@ if (isset($_POST["update"])) {
 					$brg = mysqli_query($conn, "SELECT * from detailorder d, produk p where orderid='$orderidd' and d.idproduk=p.idproduk order by d.idproduk ASC");
 					$no = 1;
 					$subtotal = 10000;
-					while ($b = mysqli_fetch_array($brg)) {
 
-						if ($b['hargaafter'] == 0) {
-							$hrg = $b['hargabefore'];
-						}
-						if (!$b['hargaafter'] == 0) {
-							$hrg = $b['hargaafter'];
-						}
+					while ($b = mysqli_fetch_array($brg)) {
+						$hrg = $b['hargaNormal'];
 						$qtyy = $b['qty'];
 						$totalharga = $hrg * $qtyy;
 						$subtotal += $totalharga

@@ -47,6 +47,15 @@ include 'dbconnect.php';
 		});
 	</script>
 	<!-- start-smoth-scrolling -->
+	
+	<!-- Custom CSS -->
+	<style>
+		.custom-title {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+	</style>
 </head>
 
 <body>
@@ -143,8 +152,8 @@ include 'dbconnect.php';
 											<?php
 											$kat = mysqli_query($conn, "SELECT * from kategori order by idkategori ASC");
 											while ($p = mysqli_fetch_array($kat)) {
-
 											?>
+
 												<li><a href="kategori.php?idkategori=<?php echo $p['idkategori'] ?>"><?php echo $p['namakategori'] ?></a></li>
 
 											<?php
@@ -171,7 +180,7 @@ include 'dbconnect.php';
 		<div class="container">
 			<ol class="breadcrumb breadcrumb1 animated wow slideInLeft" data-wow-delay=".5s">
 				<li><a href="index.php"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>Home</a></li>
-				<li class="active">Kategori</li>
+				<li class="active">Koleksi Buku</li>
 			</ol>
 		</div>
 	</div>
@@ -191,6 +200,7 @@ include 'dbconnect.php';
 						$kat = mysqli_query($conn, "SELECT * from kategori order by idkategori ASC");
 						while ($p = mysqli_fetch_array($kat)) {
 						?>
+
 							<li>
 								<a href="kategori.php?idkategori=<?php echo $p['idkategori'] ?>"><i class="fa fa-arrow-right" aria-hidden="true"></i><?php echo $p['namakategori'] ?></a>
 							</li>
@@ -204,7 +214,7 @@ include 'dbconnect.php';
 			</div>
 			<div class="col-md-8 products-right">
 				<div class="agile_top_brands_grids">
-					
+
 					<!-- Menampilkan semua data buku dari tabel produk -->
 					<?php
 					$brgs = mysqli_query($conn, "SELECT * from produk order by idproduk ASC");
@@ -226,158 +236,159 @@ include 'dbconnect.php';
 											tampilkan harga before & after.
 										-->
 										<?php
-										if ($p['hargaafter'] == 0) {
+										if ($p['totalTransaksi'] <= 5) {
 										?>
 
-										<div class="agile_top_brand_left_grid1">
-											<figure>
-												<div class="snipcart-item block">
-													<div class="snipcart-thumb">
-														<a href="product.php?idproduk=<?php echo $p['idproduk'] ?>"><img src="<?php echo $p['gambar'] ?>" width="100" height="auto"></a>
-														<p><?php echo $p['namaproduk'] ?></p>
+											<div class="agile_top_brand_left_grid1">
+												<figure>
+													<div class="snipcart-item block">
+														<div class="snipcart-thumb">
+															<a href="product.php?idproduk=<?php echo $p['idproduk'] ?>"><img src="<?php echo $p['gambar'] ?>" width="100" height="auto"></a>
+															<p class="custom-title"><?php echo $p['namaproduk'] ?></p>
 
-														<h4>Rp<?php echo number_format($p['hargabefore']) ?></h4>
+															<h4>Rp<?php echo number_format($p['hargaNormal']) ?></h4>
 
-										<?php
-										}
-										if (!$p['hargaafter'] == 0) {
-										?>
+														<?php
+													}
+													if ($p['totalTransaksi'] >= 5) {
+														?>
 
-										<div class="agile_top_brand_left_grid_pos">
-											<img src="images/offer.png" alt=".." class="img-responsive" />
-										</div>
-										<div class="agile_top_brand_left_grid1">
-											<figure>
-												<div class="snipcart-item block">
-													<div class="snipcart-thumb">
-														<a href="product.php?idproduk=<?php echo $p['idproduk'] ?>"><img src="<?php echo $p['gambar'] ?>" width="100" height="auto"></a>
-														<p><?php echo $p['namaproduk'] ?></p>
-															<h4>Rp<?php echo number_format($p['hargaafter']) ?> <span>Rp<?php echo number_format($p['hargabefore']) ?></span></h4>
+															<div class="agile_top_brand_left_grid_pos">
+																<img src="images/offer.png" alt=".." class="img-responsive" />
+															</div>
+															<div class="agile_top_brand_left_grid1">
+																<figure>
+																	<div class="snipcart-item block">
+																		<div class="snipcart-thumb">
+																			<a href="product.php?idproduk=<?php echo $p['idproduk'] ?>"><img src="<?php echo $p['gambar'] ?>" width="100" height="auto"></a>
+																			<p class="custom-title"><?php echo $p['namaproduk'] ?></p>
 
-										<?php
-										}
-										?>
+																			<h4>Rp<?php echo number_format($p['hargaNormal']) ?></h4>
 
+																		<?php
+																	}
+																		?>
+
+																		</div>
+																		<div class="snipcart-details top_brand_home_details">
+																			<fieldset>
+																				<a href="product.php?idproduk=<?php echo $p['idproduk'] ?>"><input type="submit" class="button" value="Lihat Produk" /></a>
+																			</fieldset>
+																		</div>
+																	</div>
+																</figure>
+															</div>
+														</div>
 													</div>
-													<div class="snipcart-details top_brand_home_details">
-														<fieldset>
-															<a href="product.php?idproduk=<?php echo $p['idproduk'] ?>"><input type="submit" class="button" value="Lihat Produk" /></a>
-														</fieldset>
-													</div>
-												</div>
-											</figure>
-										</div>
+											</div>
+									<?php
+								}
+							} else {
+								echo "Data tidak ditemukan";
+							}
+									?>
+
+									<div class="clearfix"> </div>
 									</div>
 								</div>
+								<div class="clearfix"> </div>
 							</div>
-					<?php
-						}
-					} else {
-						echo "Data tidak ditemukan";
-					}
-					?>
-
-					<div class="clearfix"> </div>
 				</div>
-			</div>
-			<div class="clearfix"> </div>
-		</div>
-	</div>
-	<!--- beverages --->
-	<!-- //footer -->
-	<div class="footer">
-		<div class="container">
-			<div class="w3_footer_grids">
-				<div class="col-md-4 w3_footer_grid">
-					<h3>Hubungi Kami</h3>
+				<!--- beverages --->
+				<!-- //footer -->
+				<div class="footer">
+					<div class="container">
+						<div class="w3_footer_grids">
+							<div class="col-md-4 w3_footer_grid">
+								<h3>Hubungi Kami</h3>
 
-					<ul class="address">
-						<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Richard's Lab, DKI Jakarta.</li>
-						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@email">info@email</a></li>
-						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+62 8113 2322</li>
-					</ul>
+								<ul class="address">
+									<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Richard's Lab, DKI Jakarta.</li>
+									<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@email">info@email</a></li>
+									<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i>+62 8113 2322</li>
+								</ul>
+							</div>
+							<div class="col-md-3 w3_footer_grid">
+								<h3>Tentang Kami</h3>
+								<ul class="info">
+									<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">About Us</a></li>
+									<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">How To</a></li>
+									<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">FAQ</a></li>
+								</ul>
+							</div>
+							<div class="clearfix"> </div>
+						</div>
+					</div>
+
+					<div class="footer-copy">
+
+						<div class="container">
+							<p>© 2020 Richard's Lab. All rights reserved</p>
+						</div>
+					</div>
+
 				</div>
-				<div class="col-md-3 w3_footer_grid">
-					<h3>Tentang Kami</h3>
-					<ul class="info">
-						<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">About Us</a></li>
-						<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">How To</a></li>
-						<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">FAQ</a></li>
-					</ul>
+				<div class="footer-botm">
+					<div class="container">
+						<div class="w3layouts-foot">
+							<ul>
+								<li><a href="#" class="w3_agile_instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+								<li><a href="#" class="w3_agile_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+								<li><a href="#" class="agile_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+							</ul>
+						</div>
+						<div class="payment-w3ls">
+							<img src="images/card.png" alt=" " class="img-responsive">
+						</div>
+						<div class="clearfix"> </div>
+					</div>
 				</div>
-				<div class="clearfix"> </div>
-			</div>
-		</div>
+				<!-- //footer -->
+				<!-- Bootstrap Core JavaScript -->
+				<script src="js/bootstrap.min.js"></script>
 
-		<div class="footer-copy">
+				<!-- top-header and slider -->
+				<!-- here stars scrolling icon -->
+				<script type="text/javascript">
+					$(document).ready(function() {
 
-			<div class="container">
-				<p>© 2020 Richard's Lab. All rights reserved</p>
-			</div>
-		</div>
-
-	</div>
-	<div class="footer-botm">
-		<div class="container">
-			<div class="w3layouts-foot">
-				<ul>
-					<li><a href="#" class="w3_agile_instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-					<li><a href="#" class="w3_agile_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-					<li><a href="#" class="agile_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-				</ul>
-			</div>
-			<div class="payment-w3ls">
-				<img src="images/card.png" alt=" " class="img-responsive">
-			</div>
-			<div class="clearfix"> </div>
-		</div>
-	</div>
-	<!-- //footer -->
-	<!-- Bootstrap Core JavaScript -->
-	<script src="js/bootstrap.min.js"></script>
-
-	<!-- top-header and slider -->
-	<!-- here stars scrolling icon -->
-	<script type="text/javascript">
-		$(document).ready(function() {
-
-			var defaults = {
-				containerID: 'toTop', // fading element id
-				containerHoverID: 'toTopHover', // fading element hover id
-				scrollSpeed: 4000,
-				easingType: 'linear'
-			};
+						var defaults = {
+							containerID: 'toTop', // fading element id
+							containerHoverID: 'toTopHover', // fading element hover id
+							scrollSpeed: 4000,
+							easingType: 'linear'
+						};
 
 
-			$().UItoTop({
-				easingType: 'easeOutQuart'
-			});
+						$().UItoTop({
+							easingType: 'easeOutQuart'
+						});
 
-		});
-	</script>
-	<!-- //here ends scrolling icon -->
+					});
+				</script>
+				<!-- //here ends scrolling icon -->
 
-	<!-- main slider-banner -->
-	<script src="js/skdslider.min.js"></script>
-	<link href="css/skdslider.css" rel="stylesheet">
-	<script type="text/javascript">
-		jQuery(document).ready(function() {
-			jQuery('#demo1').skdslider({
-				'delay': 5000,
-				'animationSpeed': 2000,
-				'showNextPrev': true,
-				'showPlayButton': true,
-				'autoSlide': true,
-				'animationType': 'fading'
-			});
+				<!-- main slider-banner -->
+				<script src="js/skdslider.min.js"></script>
+				<link href="css/skdslider.css" rel="stylesheet">
+				<script type="text/javascript">
+					jQuery(document).ready(function() {
+						jQuery('#demo1').skdslider({
+							'delay': 5000,
+							'animationSpeed': 2000,
+							'showNextPrev': true,
+							'showPlayButton': true,
+							'autoSlide': true,
+							'animationType': 'fading'
+						});
 
-			jQuery('#responsive').change(function() {
-				$('#responsive_wrapper').width(jQuery(this).val());
-			});
+						jQuery('#responsive').change(function() {
+							$('#responsive_wrapper').width(jQuery(this).val());
+						});
 
-		});
-	</script>
-	<!-- //main slider-banner -->
+					});
+				</script>
+				<!-- //main slider-banner -->
 </body>
 
 </html>

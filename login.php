@@ -103,16 +103,15 @@ $timenow = date("j-F-Y-h:i:s A");
 			<div class="w3ls_logo_products_left">
 				<h1><a href="index.php">Tokopekita</a></h1>
 			</div>
-		<div class="w3l_search">
-			<form action="#" method="post">
-				<input type="search" name="Search" placeholder="Cari produk..." required="">
-				<button type="submit" class="btn btn-default search" aria-label="Left Align">
-					<i class="fa fa-search" aria-hidden="true"> </i>
-				</button>
-				<div class="clearfix"></div>
-			</form>
-		</div>
-			
+			<div class="w3l_search">
+				<form action="#" method="post">
+					<input type="search" name="Search" placeholder="Cari produk..." required="">
+					<button type="submit" class="btn btn-default search" aria-label="Left Align">
+						<i class="fa fa-search" aria-hidden="true"> </i>
+					</button>
+					<div class="clearfix"></div>
+				</form>
+			</div>
 			<div class="clearfix"> </div>
 		</div>
 	</div>
@@ -144,17 +143,17 @@ $timenow = date("j-F-Y-h:i:s A");
 														
 														<?php 
 														$kat=mysqli_query($conn,"SELECT * from kategori order by idkategori ASC");
-														while($p=mysqli_fetch_array($kat)){
+														while($p=mysqli_fetch_array($kat)) {
+														?>
 
-															?>
 														<li><a href="kategori.php?idkategori=<?php echo $p['idkategori'] ?>"><?php echo $p['namakategori'] ?></a></li>
 																				
 														<?php
-																	}
+														}
 														?>
+
 													</ul>
-												</div>	
-												
+												</div>
 											</div>
 										</ul>
 									</li>

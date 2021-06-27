@@ -170,12 +170,11 @@ if (isset($_POST["update"])) {
 									<div class="multi-gd-img">
 										<ul class="multi-column-dropdown">
 											<h6>Kategori</h6>
-
 											<?php
 											$kat = mysqli_query($conn, "SELECT * from kategori order by idkategori ASC");
 											while ($p = mysqli_fetch_array($kat)) {
-
 											?>
+
 												<li><a href="kategori.php?idkategori=<?= $p['idkategori'] ?>"><?= $p['namakategori'] ?></a></li>
 
 											<?php
@@ -224,51 +223,41 @@ if (isset($_POST["update"])) {
 					</thead>
 
 					<?php
-
 					$brg = mysqli_query($conn, "SELECT DISTINCT(idcart), c.orderid, tglorder, status from cart c, detailorder d where c.userid='$uid' and d.orderid=c.orderid and status!='Cart' order by tglorder DESC");
 					$no = 1;
 					while ($b = mysqli_fetch_array($brg)) {
-
 					?>
+
 						<tr class="rem1">
 							<form method="post">
 								<td class="invert"><?= $no++ ?></td>
 								<td class="invert"><a href="order.php?id=<?= $b['orderid'] ?>"><?= $b['orderid'] ?></a></td>
-
 								<td class="invert"><?= $b['tglorder'] ?></td>
 								<td class="invert">
+									Rp
+									<?php $ongkir = 10000;
+									$ordid = $b['orderid'];
 
-									Rp<?php $ongkir = 10000;
-										$ordid = $b['orderid'];
+									$hargaProduk = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM detailorder d, produk p WHERE orderid='$ordid' AND d.idproduk=p.idproduk"));
 
-										$hargaProduk = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM detailorder d, produk p WHERE orderid='$ordid' AND d.idproduk=p.idproduk"));
+									$result1 = mysqli_query($conn, "SELECT SUM(qty*hargaNormal)+$ongkir AS count FROM detailorder d, produk p where d.orderid='$ordid' and p.idproduk=d.idproduk order by d.idproduk ASC");
 
-										if ($hargaProduk['hargaafter'] == 0) {
-											$result1 = mysqli_query($conn, "SELECT SUM(qty*hargabefore)+$ongkir AS count FROM detailorder d, produk p where d.orderid='$ordid' and p.idproduk=d.idproduk order by d.idproduk ASC");
-										}
-										if (!$hargaProduk['hargaafter'] == 0) {
-											$result1 = mysqli_query($conn, "SELECT SUM(qty*hargaafter)+$ongkir AS count FROM detailorder d, produk p where d.orderid='$ordid' and p.idproduk=d.idproduk order by d.idproduk ASC");
-										}
-										$cekrow = mysqli_num_rows($result1);
-										$row1 = mysqli_fetch_assoc($result1);
-										$count = $row1['count'];
-										if ($cekrow > 0) {
-											echo number_format($count);
-										} else {
-											echo 'No data';
-										} ?>
-
+									$cekrow = mysqli_num_rows($result1);
+									$row1 = mysqli_fetch_assoc($result1);
+									$count = $row1['count'];
+									if ($cekrow > 0) {
+										echo number_format($count);
+									} else {
+										echo 'No data';
+									}
+									?>
 								</td>
 
 								<td class="invert">
 									<div class="rem">
 										<?php
 										if ($b['status'] == 'Payment') {
-											echo '
-								<a href="konfirmasi.php?id=' . $b['orderid'] . '" class="form-control btn-primary">
-								Konfirmasi Pembayaran
-								</a>
-								';
+											echo '<a href="konfirmasi.php?id=' . $b['orderid'] . '" class="form-control btn-primary">Konfirmasi Pembayaran</a>';
 										} else if ($b['status'] == 'Diproses') {
 											echo 'Pesanan Diproses (Pembayaran Diterima)';
 										} else if ($b['status'] == 'Dikirim') {
@@ -280,8 +269,8 @@ if (isset($_POST["update"])) {
 										} else {
 											echo 'Konfirmasi diterima';
 										}
-
 										?>
+
 							</form>
 			</div>
 			<script>

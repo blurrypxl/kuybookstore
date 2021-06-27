@@ -22,13 +22,16 @@ if (isset($_POST['addprod'])) {
 			$liatlg = mysqli_num_rows($cekbrg);
 			$brpbanyak = mysqli_fetch_array($cekbrg);
 			$jmlh = $brpbanyak['qty'];
-
+	
 			//kalo ternyata barangnya udah ada
 			if ($liatlg > 0) {
 				$i = 1;
 				$baru = $jmlh + $i;
+				$qty = $jmlh1 + $i;
 
 				$updateaja = mysqli_query($conn, "update detailorder set qty='$baru' where orderid='$orid' and idproduk='$idproduk'");
+
+				// $upTtlTransaksi = mysqli_query($conn, "UPDATE produk SET totalTransaksi='$qty' WHERE idproduk='$idproduk'");
 
 				if ($updateaja) {
 					echo " <div class='alert alert-success'>
@@ -42,7 +45,7 @@ if (isset($_POST['addprod'])) {
 							  <meta http-equiv='refresh' content='1; url= product.php?idproduk=" . $idproduk . "'/>";
 				}
 			} else {
-
+				// $addTtlTransaksi = mysqli_query($conn, "UPDATE produk SET totalTransaksi='1' WHERE idproduk='$idproduk'");
 				$tambahdata = mysqli_query($conn, "insert into detailorder (orderid,idproduk,qty) values('$orid','$idproduk','1')");
 				if ($tambahdata) {
 					echo " <div class='alert alert-success'>
@@ -64,6 +67,7 @@ if (isset($_POST['addprod'])) {
 			$bikincart = mysqli_query($conn, "insert into cart (orderid, userid) values('$oi','$ui')");
 
 			if ($bikincart) {
+				// $addTtlTransaksi = mysqli_query($conn, "UPDATE produk SET totalTransaksi='1' WHERE idproduk='$idproduk'");
 				$tambahuser = mysqli_query($conn, "insert into detailorder (orderid,idproduk,qty) values('$oi','$idproduk','1')");
 				if ($tambahuser) {
 					echo " <div class='alert alert-success'>
@@ -264,7 +268,6 @@ if (isset($_POST['addprod'])) {
 	<div class="products">
 		<div class="container">
 			<div class="agileinfo_single">
-
 				<div class="col-md-4 agileinfo_single_left">
 					<img id="example" src="<?php echo $p['gambar'] ?>" alt=" " class="img-responsive">
 				</div>
@@ -288,31 +291,7 @@ if (isset($_POST['addprod'])) {
 					</div>
 					<div class="snipcart-item block">
 						<div class="snipcart-thumb agileinfo_single_right_snipcart">
-							
-							<!--
-							- Jika nilai harga after = 0 maka,
-								hanya tampilkan harga before
-
-							- Jika nilai harga after tidak = 0 maka,
-								tampilkan harga before & after.
-							-->
-							<?php
-							if ($p['hargaafter'] == 0) {
-							?>
-
-							<h4 class="m-sing">Rp<?php echo number_format($p['hargabefore']) ?></h4>
-
-							<?php
-							}
-							if (!$p['hargaafter'] == 0) {
-							?>
-
-							<h4 class="m-sing">Rp<?php echo number_format($p['hargaafter']) ?> <span>Rp<?php echo number_format($p['hargabefore']) ?></span></h4>
-
-							<?php
-							}
-							?>
-
+							<h4 class="m-sing">Rp<?php echo number_format($p['hargaNormal']) ?></h4>
 						</div>
 						<div class="snipcart-details agileinfo_single_right_details">
 							<form action="#" method="post">

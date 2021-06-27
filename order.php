@@ -242,24 +242,7 @@ $orderidd = $fetc['orderid'];
 										</div>
 									</div>
 								</td>
-
-								<?php
-								if ($b['hargaafter'] == 0) {
-								?>
-
-								<td class="invert">Rp<?php echo number_format($b['hargabefore']) ?></td>
-
-								<?php
-								}
-								if (!$b['hargaafter'] == 0) {
-								?>
-
-								<td class="invert">Rp<?php echo number_format($b['hargaafter']) ?></td>
-
-								<?php
-								}
-								?>
-
+								<td class="invert">Rp<?php echo number_format($b['hargaNormal']) ?></td>
 						</tr>
 					<?php
 					}
@@ -291,13 +274,7 @@ $orderidd = $fetc['orderid'];
 						$no = 1;
 						$subtotal = 10000;
 						while ($b = mysqli_fetch_array($brg)) {
-
-							if ($b['hargaafter'] == 0) {
-								$hrg = $b['hargabefore'];
-							}
-							if (!$b['hargaafter'] == 0) {
-								$hrg = $b['hargaafter'];
-							}
+							$hrg = $b['hargaNormal'];
 							$qtyy = $b['qty'];
 							$totalharga = $hrg * $qtyy;
 							$subtotal += $totalharga
